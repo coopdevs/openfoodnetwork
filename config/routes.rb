@@ -228,6 +228,7 @@ Spree::Core::Engine.routes.prepend do
         get :overridable
       end
       delete :soft_delete
+      post :clone
 
       resources :variants do
         delete :soft_delete
