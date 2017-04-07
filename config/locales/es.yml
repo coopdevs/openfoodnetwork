@@ -1205,6 +1205,8 @@ es:
   edit_profile_details: "Editar detalles del perfil"
   edit_profile_details_etc: "Cambia tu descripción, imágenes, etc."
   order_cycle: "Ciclo de Pedido"
+  order_cycles: "Ciclos de Pedido"
+  enterprises: "Organizaciones"
   remove_tax: "Eliminar impuesto"
   enterprise_terms_of_service: "Términos del Servicio de la Organización"
   enterprises_require_tos: "Las organizaciones deben aceptar los Términos del Servicio"
