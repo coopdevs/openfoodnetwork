@@ -65,7 +65,7 @@ describe Spree::OrdersController do
   end
 
   describe "returning stock levels in JSON on success" do
-    let(:product) { create(:simple_product) }
+    let(:product) { create(:base_product) }
 
     it "returns stock levels as JSON" do
       controller.stub(:variant_ids_in) { [123] }
@@ -166,7 +166,7 @@ describe Spree::OrdersController do
     describe "when I pass params that includes a line item no longer in our cart" do
       it "should silently ignore the missing line item" do
         order = subject.current_order(true)
-        li = order.add_variant(create(:simple_product, on_hand: 110).variants.first)
+        li = order.add_variant(create(:base_product, on_hand: 110).variants.first)
         spree_get :update, order: { line_items_attributes: {
           "0" => {quantity: "0", id: "9999"},
           "1" => {quantity: "99", id: li.id}
@@ -178,7 +178,7 @@ describe Spree::OrdersController do
 
     it "filters line items that are missing from params" do
       order = subject.current_order(true)
-      li = order.add_variant(create(:simple_product).master)
+      li = order.add_variant(create(:base_product).master)
 
       attrs = {
         "0" => {quantity: "0", id: "9999"},

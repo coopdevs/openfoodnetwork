@@ -244,7 +244,7 @@ describe Exchange do
     end
 
     it "finds exchanges with a particular product's master variant" do
-      p = create(:simple_product)
+      p = create(:base_product)
       ex = create(:exchange)
       ex.variants << p.master
       p.reload
@@ -253,7 +253,7 @@ describe Exchange do
     end
 
     it "finds exchanges with a particular product's non-master variant" do
-      p = create(:simple_product)
+      p = create(:base_product)
       v = create(:variant, product: p)
       ex = create(:exchange)
       ex.variants << v

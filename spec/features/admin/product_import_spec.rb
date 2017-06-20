@@ -14,12 +14,12 @@ feature "Product Import", js: true do
   let!(:tax_category) { create(:tax_category) }
   let!(:tax_category2) { create(:tax_category) }
   let!(:shipping_category) { create(:shipping_category) }
-  let!(:product) { create(:simple_product, supplier: enterprise2, name: 'Hypothetical Cake') }
+  let!(:product) { create(:base_product, supplier: enterprise2, name: 'Hypothetical Cake') }
   let!(:variant) { create(:variant, product_id: product.id, price: '8.50', on_hand: '100', unit_value: '500', display_name: 'Preexisting Banana') }
-  let!(:product2) { create(:simple_product, supplier: enterprise, on_hand: '100', name: 'Beans', unit_value: '500') }
-  let!(:product3) { create(:simple_product, supplier: enterprise, on_hand: '100', name: 'Sprouts') }
-  let!(:product4) { create(:simple_product, supplier: enterprise, on_hand: '100', name: 'Cabbage') }
-  let!(:product5) { create(:simple_product, supplier: enterprise2, on_hand: '100', name: 'Lettuce') }
+  let!(:product2) { create(:base_product, supplier: enterprise, on_hand: '100', name: 'Beans', unit_value: '500') }
+  let!(:product3) { create(:base_product, supplier: enterprise, on_hand: '100', name: 'Sprouts') }
+  let!(:product4) { create(:base_product, supplier: enterprise, on_hand: '100', name: 'Cabbage') }
+  let!(:product5) { create(:base_product, supplier: enterprise2, on_hand: '100', name: 'Lettuce') }
 
 
   describe "when importing products from uploaded file" do

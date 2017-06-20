@@ -8,7 +8,7 @@ describe Enterprise do
       let(:supplier2) { create(:supplier_enterprise) }
 
       describe "with a supplied product" do
-        let(:product) { create(:simple_product, supplier: enterprise) }
+        let(:product) { create(:base_product, supplier: enterprise) }
         let!(:classification) { create(:classification, taxon: taxon, product: product) }
         let(:property) { product.product_properties.last }
         let(:producer_property) { enterprise.producer_properties.last }
@@ -38,7 +38,7 @@ describe Enterprise do
       end
 
       describe "with a distributed product" do
-        let(:product) { create(:simple_product) }
+        let(:product) { create(:base_product) }
         let(:oc) { create(:simple_order_cycle, distributors: [enterprise], variants: [product.variants.first]) }
         let(:supplier) { product.supplier }
         let!(:classification) { create(:classification, taxon: taxon, product: product) }

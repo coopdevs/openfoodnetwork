@@ -23,7 +23,7 @@ describe ShopController, type: :controller, performance: true do
 
     before do
       11.times do
-        p = create(:simple_product)
+        p = create(:base_product)
         p.set_property 'Organic Certified', 'NASAA 12345'
         v1 = create(:variant, product: p)
         v2 = create(:variant, product: p)

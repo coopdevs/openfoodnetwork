@@ -7,7 +7,7 @@ module Spree
     let!(:t2) { create(:taxon) }
 
     describe "callbacks" do
-      let!(:p2) { create(:simple_product, taxons: [t1], primary_taxon: t2) }
+      let!(:p2) { create(:base_product, taxons: [t1], primary_taxon: t2) }
 
       it "refreshes the products cache on save" do
         expect(OpenFoodNetwork::ProductsCache).to receive(:product_changed).with(p2)
@@ -22,7 +22,7 @@ module Spree
     end
 
     describe "finding all supplied taxons" do
-      let!(:p1) { create(:simple_product, supplier: e, taxons: [t1, t2]) }
+      let!(:p1) { create(:base_product, supplier: e, taxons: [t1, t2]) }
 
       it "finds taxons" do
         Taxon.supplied_taxons.should == {e.id => Set.new(p1.taxons.map(&:id))}
@@ -32,8 +32,8 @@ module Spree
     describe "finding distributed taxons" do
       let!(:oc_open)   { create(:open_order_cycle, distributors: [e], variants: [p_open.variants.first]) }
       let!(:oc_closed) { create(:closed_order_cycle, distributors: [e], variants: [p_closed.variants.first]) }
-      let!(:p_open) { create(:simple_product, primary_taxon: t1) }
-      let!(:p_closed) { create(:simple_product, primary_taxon: t2) }
+      let!(:p_open) { create(:base_product, primary_taxon: t1) }
+      let!(:p_closed) { create(:base_product, primary_taxon: t2) }
 
       it "finds all distributed taxons" do
         expect(Taxon.distributed_taxons(:all)).to eq({e.id => Set.new([t1.id, t2.id])})

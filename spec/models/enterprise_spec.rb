@@ -102,7 +102,7 @@ describe Enterprise do
 
     it "destroys supplied products upon destroy" do
       s = create(:supplier_enterprise)
-      p = create(:simple_product, supplier: s)
+      p = create(:base_product, supplier: s)
 
       s.destroy
 
@@ -511,14 +511,14 @@ describe Enterprise do
     describe "supplying_variant_in" do
       it "finds producers by supply of master variant" do
         s = create(:supplier_enterprise)
-        p = create(:simple_product, supplier: s)
+        p = create(:base_product, supplier: s)
 
         Enterprise.supplying_variant_in([p.master]).should == [s]
       end
 
       it "finds producers by supply of variant" do
         s = create(:supplier_enterprise)
-        p = create(:simple_product, supplier: s)
+        p = create(:base_product, supplier: s)
         v = create(:variant, product: p)
 
         Enterprise.supplying_variant_in([v]).should == [s]
@@ -527,16 +527,16 @@ describe Enterprise do
       it "returns multiple enterprises when given multiple variants" do
         s1 = create(:supplier_enterprise)
         s2 = create(:supplier_enterprise)
-        p1 = create(:simple_product, supplier: s1)
-        p2 = create(:simple_product, supplier: s2)
+        p1 = create(:base_product, supplier: s1)
+        p2 = create(:base_product, supplier: s2)
 
         Enterprise.supplying_variant_in([p1.master, p2.master]).should match_array [s1, s2]
       end
 
       it "does not return duplicates" do
         s = create(:supplier_enterprise)
-        p1 = create(:simple_product, supplier: s)
-        p2 = create(:simple_product, supplier: s)
+        p1 = create(:base_product, supplier: s)
+        p2 = create(:base_product, supplier: s)
 
         Enterprise.supplying_variant_in([p1.master, p2.master]).should == [s]
       end
@@ -748,8 +748,8 @@ describe Enterprise do
     let(:supplier) { create(:supplier_enterprise) }
     let(:taxon1) { create(:taxon) }
     let(:taxon2) { create(:taxon) }
-    let(:product1) { create(:simple_product, primary_taxon: taxon1, taxons: [taxon1]) }
-    let(:product2) { create(:simple_product, primary_taxon: taxon1, taxons: [taxon1, taxon2]) }
+    let(:product1) { create(:base_product, primary_taxon: taxon1, taxons: [taxon1]) }
+    let(:product2) { create(:base_product, primary_taxon: taxon1, taxons: [taxon1, taxon2]) }
 
     it "gets all taxons of all distributed products" do
       Spree::Product.stub(:in_distributor).and_return [product1, product2]

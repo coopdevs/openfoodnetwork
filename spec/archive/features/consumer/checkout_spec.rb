@@ -134,7 +134,7 @@ feature %q{
     # Given some products, one with product distribution only, (@product1)
     # one with order cycle distribution only, (@product_oc)
     supplier = create(:supplier_enterprise)
-    product_oc = create(:simple_product, name: 'Feijoas')
+    product_oc = create(:base_product, name: 'Feijoas')
     @order_cycle = create(:simple_order_cycle, suppliers: [supplier], distributors: [@distributor], variants: [product_oc.master], orders_close_at: Time.zone.now + 2.weeks)
     @order_cycle.coordinator_fees << create(:enterprise_fee, enterprise: @order_cycle.coordinator)
 
@@ -511,12 +511,12 @@ feature %q{
     # Products
     @distributor_oc = distributor1
 
-    @product_3 = create(:simple_product, name: 'Bananas', supplier: supplier1)
+    @product_3 = create(:base_product, name: 'Bananas', supplier: supplier1)
     ex1.variants << @product_3.master
     ex3.variants << @product_3.master
     ex4.variants << @product_3.master
 
-    @product_4 = create(:simple_product, name: 'Zucchini', supplier: supplier2)
+    @product_4 = create(:base_product, name: 'Zucchini', supplier: supplier2)
     ex2.variants << @product_4.master
     ex3.variants << @product_4.master
     ex4.variants << @product_4.master

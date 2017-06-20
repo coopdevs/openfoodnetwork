@@ -11,9 +11,9 @@ describe ProducerProperty do
   describe ".currently_sold_by and .ever_sold_by" do
     let!(:shop) { create(:distributor_enterprise) }
     let!(:oc) { create(:simple_order_cycle, distributors: [shop], variants: [product.variants.first]) }
-    let(:product) { create(:simple_product, supplier: producer) }
+    let(:product) { create(:base_product, supplier: producer) }
     let(:producer_other) { create(:supplier_enterprise) }
-    let(:product_other) { create(:simple_product, supplier: producer_other) }
+    let(:product_other) { create(:base_product, supplier: producer_other) }
     let(:pp_other) { producer_other.producer_properties.first }
 
     before do
@@ -62,7 +62,7 @@ describe ProducerProperty do
     end
 
     describe "with a duplicate producer property" do
-      let(:product2) { create(:simple_product, supplier: producer) }
+      let(:product2) { create(:base_product, supplier: producer) }
       let!(:oc) { create(:simple_order_cycle, distributors: [shop], variants: [product.variants.first, product2.variants.first]) }
 
       it "doesn't return duplicates" do

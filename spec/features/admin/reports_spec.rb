@@ -97,10 +97,10 @@ feature %q{
     let(:order1) { create(:order, distributor: distributor, bill_address: bill_address1) }
     let(:order2) { create(:order, distributor: distributor, bill_address: bill_address2) }
     let(:supplier) { create(:supplier_enterprise, name: "Supplier") }
-    let(:product_1) { create(:simple_product, name: "Product 1", supplier: supplier ) }
+    let(:product_1) { create(:base_product, name: "Product 1", supplier: supplier ) }
     let(:variant_1) { create(:variant, product: product_1, unit_description: "Big") }
     let(:variant_2) { create(:variant, product: product_1, unit_description: "Small") }
-    let(:product_2) { create(:simple_product, name: "Product 2", supplier: supplier) }
+    let(:product_2) { create(:base_product, name: "Product 2", supplier: supplier) }
 
     before do
       Timecop.travel(Time.zone.local(2013, 4, 25, 14, 0, 0)) { order1.finalize! }
@@ -286,8 +286,8 @@ feature %q{
   describe "products and inventory report", js: true do
     let(:supplier) { create(:supplier_enterprise, name: 'Supplier Name') }
     let(:taxon)    { create(:taxon, name: 'Taxon Name') }
-    let(:product1) { create(:simple_product, name: "Product Name", price: 100, supplier: supplier, primary_taxon: taxon) }
-    let(:product2) { create(:simple_product, name: "Product 2", price: 99.0, variant_unit: 'weight', variant_unit_scale: 1, unit_value: '100', supplier: supplier, primary_taxon: taxon, sku: "product_sku") }
+    let(:product1) { create(:base_product, name: "Product Name", price: 100, supplier: supplier, primary_taxon: taxon) }
+    let(:product2) { create(:base_product, name: "Product 2", price: 99.0, variant_unit: 'weight', variant_unit_scale: 1, unit_value: '100', supplier: supplier, primary_taxon: taxon, sku: "product_sku") }
     let(:variant1) { product1.variants.first }
     let(:variant2) { create(:variant, product: product1, price: 80.0) }
     let(:variant3) { product2.variants.first }

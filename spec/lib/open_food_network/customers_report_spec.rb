@@ -85,7 +85,7 @@ module OpenFoodNetwork
 
       describe "fetching orders" do
         let(:supplier) { create(:supplier_enterprise) }
-        let(:product) { create(:simple_product, supplier: supplier) }
+        let(:product) { create(:base_product, supplier: supplier) }
         let(:order) { create(:order, completed_at: 1.day.ago) }
 
         it "only shows orders managed by the current user" do
@@ -123,8 +123,8 @@ module OpenFoodNetwork
         it "returns orders with a specific supplier" do
           supplier = create(:supplier_enterprise)
           supplier2 = create(:supplier_enterprise)
-          product1 = create(:simple_product, supplier: supplier)
-          product2 = create(:simple_product, supplier: supplier2)
+          product1 = create(:base_product, supplier: supplier)
+          product2 = create(:base_product, supplier: supplier2)
           order1 = create(:order)
           order2 = create(:order)
           order1.line_items << create(:line_item, product: product1)

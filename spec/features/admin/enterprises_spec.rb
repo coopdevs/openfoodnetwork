@@ -267,7 +267,7 @@ feature %q{
 
   describe "inventory settings", js: true do
     let!(:enterprise) { create(:distributor_enterprise) }
-    let!(:product) { create(:simple_product) }
+    let!(:product) { create(:base_product) }
     let!(:order_cycle) { create(:simple_order_cycle, distributors: [enterprise], variants: [product.variants.first]) }
 
     before do

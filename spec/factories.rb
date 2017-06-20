@@ -233,7 +233,7 @@ FactoryGirl.define do
     order_cycle { create(:simple_order_cycle) }
 
     after(:create) do |order|
-      p = create(:simple_product, :distributors => [order.distributor])
+      p = create(:base_product, :distributors => [order.distributor])
       FactoryGirl.create(:line_item, :order => order, :product => p)
       order.reload
     end
@@ -369,7 +369,7 @@ FactoryGirl.modify do
   factory :product do
     primary_taxon { Spree::Taxon.first || FactoryGirl.create(:taxon) }
   end
-  factory :simple_product do
+  factory :base_product do
     # Fix product factory name sequence with Kernel.rand so it is not interpreted as a Spree::Product method
     # Pull request: https://github.com/spree/spree/pull/1964
     # When this fix has been merged into a version of Spree that we're using, this line can be removed.

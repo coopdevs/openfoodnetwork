@@ -488,7 +488,7 @@ feature %q{
     # (this usually happens when a product is added to an order cycle, then variants are added
     #  to the product after the fact)
     s = create(:supplier_enterprise)
-    p = create(:simple_product, supplier: s)
+    p = create(:base_product, supplier: s)
     v = create(:variant, product: p)
     d = create(:distributor_enterprise)
     oc = create(:simple_order_cycle, suppliers: [s], distributors: [d], variants: [p.master])
@@ -851,9 +851,9 @@ feature %q{
   describe "simplified interface for enterprise users selling only their own produce" do
     let(:user) { create_enterprise_user }
     let(:enterprise) { create(:enterprise, is_primary_producer: true, sells: 'own') }
-    let!(:p1) { create(:simple_product, supplier: enterprise) }
-    let!(:p2) { create(:simple_product, supplier: enterprise) }
-    let!(:p3) { create(:simple_product, supplier: enterprise) }
+    let!(:p1) { create(:base_product, supplier: enterprise) }
+    let!(:p2) { create(:base_product, supplier: enterprise) }
+    let!(:p3) { create(:base_product, supplier: enterprise) }
     let!(:v1) { p1.variants.first }
     let!(:v2) { p2.variants.first }
     let!(:v3) { p3.variants.first }

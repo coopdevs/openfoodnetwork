@@ -22,8 +22,8 @@ feature 'Groups', js: true do
       let!(:producer1) { create(:supplier_enterprise) }
       let!(:producer2) { create(:supplier_enterprise) }
 
-      let!(:product1) { create(:simple_product, supplier: producer1) }
-      let!(:product2) { create(:simple_product, supplier: producer2) }
+      let!(:product1) { create(:base_product, supplier: producer1) }
+      let!(:product2) { create(:base_product, supplier: producer2) }
 
       before do
         product1.set_property 'Organic', 'NASAA 12345'
@@ -62,8 +62,8 @@ feature 'Groups', js: true do
       let(:producer) { create(:supplier_enterprise) }
       let(:d1) { create(:distributor_enterprise) }
       let(:d2) { create(:distributor_enterprise) }
-      let(:p1) { create(:simple_product, supplier: producer) }
-      let(:p2) { create(:simple_product, supplier: create(:supplier_enterprise)) }
+      let(:p1) { create(:base_product, supplier: producer) }
+      let(:p2) { create(:base_product, supplier: create(:supplier_enterprise)) }
       let(:ex_d1) { order_cycle.exchanges.outgoing.where(receiver_id: d1).first }
       let(:ex_d2) { order_cycle.exchanges.outgoing.where(receiver_id: d2).first }
 

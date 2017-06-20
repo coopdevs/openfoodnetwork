@@ -6,9 +6,9 @@ module Spree
       describe ".applied_by" do
         let(:producer) { create(:supplier_enterprise) }
         let(:producer_other) { create(:supplier_enterprise) }
-        let(:product) { create(:simple_product, supplier: producer) }
-        let(:product_other_producer) { create(:simple_product, supplier: producer_other) }
-        let(:product_other_property) { create(:simple_product, supplier: producer) }
+        let(:product) { create(:base_product, supplier: producer) }
+        let(:product_other_producer) { create(:base_product, supplier: producer_other) }
+        let(:product_other_property) { create(:base_product, supplier: producer) }
         let(:property) { product.properties.last }
         let(:property_other) { product_other_producer.properties.last }
 
@@ -34,9 +34,9 @@ module Spree
       describe ".currently_sold_by and .ever_sold_by" do
         let!(:shop) { create(:distributor_enterprise) }
         let!(:shop_other) { create(:distributor_enterprise) }
-        let!(:product) { create(:simple_product) }
-        let!(:product_other_ex) { create(:simple_product) }
-        let!(:product_no_oc) { create(:simple_product) }
+        let!(:product) { create(:base_product) }
+        let!(:product_other_ex) { create(:base_product) }
+        let!(:product_no_oc) { create(:base_product) }
         let!(:oc) { create(:simple_order_cycle, distributors: [shop], variants: [product.variants.first]) }
         let!(:exchange_other_shop) { create(:exchange, order_cycle: oc, sender: oc.coordinator, receiver: shop_other, variants: [product_other_ex.variants.first]) }
         let(:property) { product.properties.last }
@@ -65,7 +65,7 @@ module Spree
         end
 
         describe "closed order cyces" do
-          let!(:product_closed_oc) { create(:simple_product) }
+          let!(:product_closed_oc) { create(:base_product) }
           let!(:oc_closed) { create(:closed_order_cycle, distributors: [shop], variants: [product_closed_oc.variants.first]) }
           let(:property_closed_oc) { product_closed_oc.properties.last }
 
@@ -81,7 +81,7 @@ module Spree
         end
 
         context "with another product in the order cycle" do
-          let!(:product2) { create(:simple_product) }
+          let!(:product2) { create(:base_product) }
           let!(:oc) { create(:simple_order_cycle, distributors: [shop], variants: [product.variants.first, product2.variants.first]) }
 
           before do

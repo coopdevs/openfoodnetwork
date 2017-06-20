@@ -16,7 +16,7 @@ module Spree
     end
 
     describe "callbacks" do
-      let!(:product)    { create(:simple_product) }
+      let!(:product)    { create(:base_product) }
 
       let!(:image_file) { File.open("#{Rails.root}/app/assets/images/logo-white.png") }
       let!(:image)      { Image.create(viewable_id: product.master.id, viewable_type: 'Spree::Variant', alt: "image", attachment: image_file) }

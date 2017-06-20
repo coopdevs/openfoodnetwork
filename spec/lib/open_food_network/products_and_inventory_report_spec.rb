@@ -77,7 +77,7 @@ module OpenFoodNetwork
 
       describe "fetching child variants" do
         it "returns some variants" do
-          product1 = create(:simple_product, supplier: supplier)
+          product1 = create(:base_product, supplier: supplier)
           variant_1 = product1.variants.first
           variant_2 = create(:variant, product: product1)
 
@@ -85,8 +85,8 @@ module OpenFoodNetwork
         end
 
         it "should only return variants managed by the user" do
-          product1 = create(:simple_product, supplier: create(:supplier_enterprise))
-          product2 = create(:simple_product, supplier: supplier)
+          product1 = create(:base_product, supplier: create(:supplier_enterprise))
+          product2 = create(:base_product, supplier: supplier)
           variant_1 = product1.variants.first
           variant_2 = product2.variants.first
 
@@ -97,21 +97,21 @@ module OpenFoodNetwork
       describe "Filtering variants" do
         let(:variants) { Spree::Variant.scoped.joins(:product).where(is_master: false) }
         it "should return unfiltered variants sans-params" do
-          product1 = create(:simple_product, supplier: supplier)
-          product2 = create(:simple_product, supplier: supplier)
+          product1 = create(:base_product, supplier: supplier)
+          product2 = create(:base_product, supplier: supplier)
 
           subject.filter(Spree::Variant.scoped).should match_array [product1.master, product1.variants.first, product2.master, product2.variants.first]
         end
         it "should filter deleted products" do
-          product1 = create(:simple_product, supplier: supplier)
-          product2 = create(:simple_product, supplier: supplier)
+          product1 = create(:base_product, supplier: supplier)
+          product2 = create(:base_product, supplier: supplier)
           product2.delete
           subject.filter(Spree::Variant.scoped).should match_array [product1.master, product1.variants.first]
         end
         describe "based on report type" do
           it "returns only variants on hand" do
-            product1 = create(:simple_product, supplier: supplier, on_hand: 99)
-            product2 = create(:simple_product, supplier: supplier, on_hand: 0)
+            product1 = create(:base_product, supplier: supplier, on_hand: 99)
+            product2 = create(:base_product, supplier: supplier, on_hand: 0)
 
             subject.stub(:params).and_return(report_type: 'inventory')
             subject.filter(variants).should == [product1.variants.first]
@@ -119,16 +119,16 @@ module OpenFoodNetwork
         end
         it "filters to a specific supplier" do
           supplier2 = create(:supplier_enterprise)
-          product1 = create(:simple_product, supplier: supplier)
-          product2 = create(:simple_product, supplier: supplier2)
+          product1 = create(:base_product, supplier: supplier)
+          product2 = create(:base_product, supplier: supplier2)
 
           subject.stub(:params).and_return(supplier_id: supplier.id)
           subject.filter(variants).should == [product1.variants.first]
         end
         it "filters to a specific distributor" do
           distributor = create(:distributor_enterprise)
-          product1 = create(:simple_product, supplier: supplier)
-          product2 = create(:simple_product, supplier: supplier)
+          product1 = create(:base_product, supplier: supplier)
+          product2 = create(:base_product, supplier: supplier)
           order_cycle = create(:simple_order_cycle, suppliers: [supplier], distributors: [distributor], variants: [product2.variants.first])
 
           subject.stub(:params).and_return(distributor_id: distributor.id)
@@ -136,8 +136,8 @@ module OpenFoodNetwork
         end
         it "filters to a specific order cycle" do
           distributor = create(:distributor_enterprise)
-          product1 = create(:simple_product, supplier: supplier)
-          product2 = create(:simple_product, supplier: supplier)
+          product1 = create(:base_product, supplier: supplier)
+          product2 = create(:base_product, supplier: supplier)
           order_cycle = create(:simple_order_cycle, suppliers: [supplier], distributors: [distributor], variants: [product1.variants.first])
 
           subject.stub(:params).and_return(order_cycle_id: order_cycle.id)
@@ -146,8 +146,8 @@ module OpenFoodNetwork
 
         it "should do all the filters at once" do
           distributor = create(:distributor_enterprise)
-          product1 = create(:simple_product, supplier: supplier)
-          product2 = create(:simple_product, supplier: supplier)
+          product1 = create(:base_product, supplier: supplier)
+          product2 = create(:base_product, supplier: supplier)
           order_cycle = create(:simple_order_cycle, suppliers: [supplier], distributors: [distributor], variants: [product1.variants.first])
 
           subject.stub(:params).and_return(

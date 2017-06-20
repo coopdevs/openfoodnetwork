@@ -8,8 +8,8 @@ module Spree
       let(:s1) { create(:supplier_enterprise) }
       let(:s2) { create(:supplier_enterprise) }
 
-      let(:p1) { create(:simple_product, supplier: s1) }
-      let(:p2) { create(:simple_product, supplier: s2) }
+      let(:p1) { create(:base_product, supplier: s1) }
+      let(:p2) { create(:base_product, supplier: s2) }
 
       let(:li1) { create(:line_item, order: o, product: p1) }
       let(:li2) { create(:line_item, order: o, product: p2) }
@@ -394,10 +394,10 @@ module Spree
       end
 
       context "when the line_item already has a final_weight_volume set (and all required option values do not exist)" do
-        let!(:p0) { create(:simple_product, variant_unit: 'weight', variant_unit_scale: 1) }
+        let!(:p0) { create(:base_product, variant_unit: 'weight', variant_unit_scale: 1) }
         let!(:v) { create(:variant, product: p0, unit_value: 10, unit_description: 'bar') }
 
-        let!(:p) { create(:simple_product, variant_unit: 'weight', variant_unit_scale: 1) }
+        let!(:p) { create(:base_product, variant_unit: 'weight', variant_unit_scale: 1) }
         let!(:li) { create(:line_item, product: p, final_weight_volume: 5) }
 
         it "removes the old option value and assigns the new one" do
@@ -417,10 +417,10 @@ module Spree
       end
 
       context "when the variant already has a value set (and all required option values exist)" do
-        let!(:p0) { create(:simple_product, variant_unit: 'weight', variant_unit_scale: 1) }
+        let!(:p0) { create(:base_product, variant_unit: 'weight', variant_unit_scale: 1) }
         let!(:v) { create(:variant, product: p0, unit_value: 10, unit_description: 'bar') }
 
-        let!(:p) { create(:simple_product, variant_unit: 'weight', variant_unit_scale: 1) }
+        let!(:p) { create(:base_product, variant_unit: 'weight', variant_unit_scale: 1) }
         let!(:li) { create(:line_item, product: p, final_weight_volume: 5) }
 
         it "removes the old option value and assigns the new one" do
@@ -439,7 +439,7 @@ module Spree
     end
 
     describe "deleting unit option values" do
-      let!(:p) { create(:simple_product, variant_unit: 'weight', variant_unit_scale: 1) }
+      let!(:p) { create(:base_product, variant_unit: 'weight', variant_unit_scale: 1) }
       let!(:ot) { Spree::OptionType.find_by_name 'unit_weight' }
       let!(:li) { create(:line_item, product: p) }
 

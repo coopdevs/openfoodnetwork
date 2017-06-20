@@ -9,7 +9,7 @@ feature %q{
 
   scenario "creating a new variant" do
     # Given a product with a unit-related option type
-    p = create(:simple_product, variant_unit: "weight", variant_unit_scale: "1")
+    p = create(:base_product, variant_unit: "weight", variant_unit_scale: "1")
 
     # When I create a variant on the product
     login_to_admin_section
@@ -27,7 +27,7 @@ feature %q{
 
   scenario "editing unit value and description for a variant", js:true do
     # Given a product with unit-related option types, with a variant
-    p = create(:simple_product, variant_unit: "weight", variant_unit_scale: "1")
+    p = create(:base_product, variant_unit: "weight", variant_unit_scale: "1")
     v = p.variants.first
     v.update_attributes( unit_value: 1, unit_description: 'foo' )
 
@@ -59,7 +59,7 @@ feature %q{
   end
 
   it "soft-deletes variants", js: true do
-    p = create(:simple_product)
+    p = create(:base_product)
     v = create(:variant, product: p)
 
     login_to_admin_section

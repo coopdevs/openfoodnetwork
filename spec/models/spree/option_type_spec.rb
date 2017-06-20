@@ -3,7 +3,7 @@ require 'spec_helper'
 module Spree
   describe OptionType do
     describe "products cache" do
-      let!(:product) { create(:simple_product, option_types: [option_type]) }
+      let!(:product) { create(:base_product, option_types: [option_type]) }
       let(:variant) { product.variants.first }
       let(:option_type) { create(:option_type) }
       let(:option_value) { create(:option_value, option_type: option_type) }

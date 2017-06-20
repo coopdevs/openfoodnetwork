@@ -16,7 +16,7 @@ describe Spree::Order do
     end
 
     it "does nothing when the line item is not found" do
-      p = create(:simple_product)
+      p = create(:base_product)
       subject.set_variant_attributes(p.master, {'max_quantity' => '3'}.with_indifferent_access)
     end
   end

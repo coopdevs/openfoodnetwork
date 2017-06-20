@@ -435,8 +435,8 @@ module OpenFoodNetwork
     describe "finding the variants within a hypothetical exchange between two enterprises which are visible to a user" do
       let!(:producer1) { create(:supplier_enterprise) }
       let!(:producer2) { create(:supplier_enterprise) }
-      let!(:v1) { create(:variant, product: create(:simple_product, supplier: producer1)) }
-      let!(:v2) { create(:variant, product: create(:simple_product, supplier: producer2)) }
+      let!(:v1) { create(:variant, product: create(:base_product, supplier: producer1)) }
+      let!(:v2) { create(:variant, product: create(:base_product, supplier: producer2)) }
 
       describe "incoming exchanges" do
         context "as a manager of the coordinator" do
@@ -504,7 +504,7 @@ module OpenFoodNetwork
           end
 
           context "where the coordinator produces products" do
-            let!(:v3) { create(:variant, product: create(:simple_product, supplier: coordinator)) }
+            let!(:v3) { create(:variant, product: create(:base_product, supplier: coordinator)) }
 
             it "returns any variants produced by the coordinator itself for exchanges with 'self'" do
               visible = permissions.visible_variants_for_outgoing_exchanges_to(coordinator)
@@ -547,7 +547,7 @@ module OpenFoodNetwork
 
           context "where the hub produces products" do
             # NOTE: No relationship to self required
-            let!(:v3) { create(:variant, product: create(:simple_product, supplier: hub)) }
+            let!(:v3) { create(:variant, product: create(:base_product, supplier: hub)) }
 
             it "returns any variants produced by the hub" do
               visible = permissions.visible_variants_for_outgoing_exchanges_to(hub)
@@ -609,7 +609,7 @@ module OpenFoodNetwork
           context "but which has variants already in the exchange" do
             let!(:ex) { create(:exchange, order_cycle: oc, sender: coordinator, receiver: hub, incoming: false) }
             # This one won't be in the exchange, and so shouldn't be visible
-            let!(:v3) { create(:variant, product: create(:simple_product, supplier: producer2)) }
+            let!(:v3) { create(:variant, product: create(:base_product, supplier: producer2)) }
 
             before { ex.variants << v2 }
 
@@ -626,8 +626,8 @@ module OpenFoodNetwork
     describe "finding the variants within a hypothetical exchange between two enterprises which are editable by a user" do
       let!(:producer1) { create(:supplier_enterprise) }
       let!(:producer2) { create(:supplier_enterprise) }
-      let!(:v1) { create(:variant, product: create(:simple_product, supplier: producer1)) }
-      let!(:v2) { create(:variant, product: create(:simple_product, supplier: producer2)) }
+      let!(:v1) { create(:variant, product: create(:base_product, supplier: producer1)) }
+      let!(:v2) { create(:variant, product: create(:base_product, supplier: producer2)) }
 
       describe "incoming exchanges" do
         context "as a manager of the coordinator" do
@@ -681,7 +681,7 @@ module OpenFoodNetwork
           end
 
           context "where the coordinator produces products" do
-            let!(:v3) { create(:variant, product: create(:simple_product, supplier: coordinator)) }
+            let!(:v3) { create(:variant, product: create(:base_product, supplier: coordinator)) }
 
             it "returns any variants produced by the coordinator itself for exchanges with 'self'" do
               visible = permissions.editable_variants_for_outgoing_exchanges_to(coordinator)
@@ -724,7 +724,7 @@ module OpenFoodNetwork
 
           context "where the hub produces products" do
             # NOTE: No relationship to self required
-            let!(:v3) { create(:variant, product: create(:simple_product, supplier: hub)) }
+            let!(:v3) { create(:variant, product: create(:base_product, supplier: hub)) }
 
             it "returns any variants produced by the hub" do
               visible = permissions.visible_variants_for_outgoing_exchanges_to(hub)
@@ -801,7 +801,7 @@ module OpenFoodNetwork
           context "but which has variants already in the exchange" do
             let!(:ex) { create(:exchange, order_cycle: oc, sender: coordinator, receiver: hub, incoming: false) }
             # This one won't be in the exchange, and so shouldn't be visible
-            let!(:v3) { create(:variant, product: create(:simple_product, supplier: producer2)) }
+            let!(:v3) { create(:variant, product: create(:base_product, supplier: producer2)) }
 
             before { ex.variants << v2 }
 

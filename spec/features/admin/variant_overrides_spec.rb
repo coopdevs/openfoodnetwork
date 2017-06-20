@@ -38,19 +38,19 @@ feature %q{
     end
 
     context "when inventory_items exist for variants" do
-      let!(:product) { create(:simple_product, supplier: producer, variant_unit: 'weight', variant_unit_scale: 1) }
+      let!(:product) { create(:base_product, supplier: producer, variant_unit: 'weight', variant_unit_scale: 1) }
       let!(:variant) { create(:variant, product: product, unit_value: 1, price: 1.23, on_hand: 12) }
       let!(:inventory_item) { create(:inventory_item, enterprise: hub, variant: variant ) }
 
-      let!(:product_managed) { create(:simple_product, supplier: producer_managed, variant_unit: 'weight', variant_unit_scale: 1) }
+      let!(:product_managed) { create(:base_product, supplier: producer_managed, variant_unit: 'weight', variant_unit_scale: 1) }
       let!(:variant_managed) { create(:variant, product: product_managed, unit_value: 3, price: 3.65, on_hand: 2) }
       let!(:inventory_item_managed) { create(:inventory_item, enterprise: hub, variant: variant_managed ) }
 
-      let!(:product_related) { create(:simple_product, supplier: producer_related) }
+      let!(:product_related) { create(:base_product, supplier: producer_related) }
       let!(:variant_related) { create(:variant, product: product_related, unit_value: 2, price: 2.34, on_hand: 23) }
       let!(:inventory_item_related) { create(:inventory_item, enterprise: hub, variant: variant_related ) }
 
-      let!(:product_unrelated) { create(:simple_product, supplier: producer_unrelated) }
+      let!(:product_unrelated) { create(:base_product, supplier: producer_unrelated) }
 
 
       before do
@@ -218,7 +218,7 @@ feature %q{
         context "with overrides" do
           let!(:vo) { create(:variant_override, variant: variant, hub: hub, price: 77.77, count_on_hand: 11111, default_stock: 1000, resettable: true, tag_list: ["tag1","tag2","tag3"]) }
           let!(:vo_no_auth) { create(:variant_override, variant: variant, hub: hub2, price: 1, count_on_hand: 2) }
-          let!(:product2) { create(:simple_product, supplier: producer, variant_unit: 'weight', variant_unit_scale: 1) }
+          let!(:product2) { create(:base_product, supplier: producer, variant_unit: 'weight', variant_unit_scale: 1) }
           let!(:variant2) { create(:variant, product: product2, unit_value: 8, price: 1.00, on_hand: 12) }
           let!(:inventory_item2) { create(:inventory_item, enterprise: hub, variant: variant2) }
           let!(:vo_no_reset) { create(:variant_override, variant: variant2, hub: hub, price: 3.99, count_on_hand: 40, default_stock: 100, resettable: false) }
@@ -342,7 +342,7 @@ feature %q{
     end
 
     describe "when inventory_items do not exist for variants" do
-      let!(:product) { create(:simple_product, supplier: producer, variant_unit: 'weight', variant_unit_scale: 1) }
+      let!(:product) { create(:base_product, supplier: producer, variant_unit: 'weight', variant_unit_scale: 1) }
       let!(:variant1) { create(:variant, product: product, unit_value: 1, price: 1.23, on_hand: 12) }
       let!(:variant2) { create(:variant, product: product, unit_value: 2, price: 4.56, on_hand: 3) }
 

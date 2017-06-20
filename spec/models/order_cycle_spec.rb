@@ -183,8 +183,8 @@ describe OrderCycle do
   end
 
   it "checks for variants" do
-    p1 = create(:simple_product)
-    p2 = create(:simple_product)
+    p1 = create(:base_product)
+    p2 = create(:base_product)
     oc = create(:simple_order_cycle, suppliers: [p1.supplier], variants: [p1.master])
 
     oc.should have_variant(p1.master)
@@ -201,12 +201,12 @@ describe OrderCycle do
                 order_cycle: oc, sender: oc.coordinator, receiver: d1) }
     let!(:e2) { create(:exchange, incoming: false,
                 order_cycle: oc, sender: oc.coordinator, receiver: d2) }
-    let!(:p0) { create(:simple_product) }
-    let!(:p1) { create(:simple_product) }
+    let!(:p0) { create(:base_product) }
+    let!(:p1) { create(:base_product) }
     let!(:p1_v_deleted) { create(:variant, product: p1, deleted_at: Time.zone.now) }
     let!(:p1_v_visible) { create(:variant, product: p1, inventory_items: [create(:inventory_item, enterprise: d2, visible: true)]) }
     let!(:p1_v_hidden) { create(:variant, product: p1, inventory_items: [create(:inventory_item, enterprise: d2, visible: false)]) }
-    let!(:p2) { create(:simple_product) }
+    let!(:p2) { create(:base_product) }
     let!(:p2_v) { create(:variant, product: p2) }
 
     before(:each) do

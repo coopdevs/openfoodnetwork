@@ -71,7 +71,7 @@ module OpenFoodNetwork
     end
 
     describe "when a product changes" do
-      let(:product) { create(:simple_product) }
+      let(:product) { create(:base_product) }
       let(:v1) { create(:variant, product: product) }
       let(:v2) { create(:variant, product: product) }
       let(:d1) { create(:distributor_enterprise) }
@@ -90,7 +90,7 @@ module OpenFoodNetwork
     end
 
     describe "when a product is deleted" do
-      let(:product) { create(:simple_product) }
+      let(:product) { create(:base_product) }
       let(:variant) { create(:variant, product: product) }
       let(:distributor) { create(:distributor_enterprise) }
       let!(:oc) { create(:open_order_cycle, distributors: [distributor], variants: [variant]) }
@@ -141,7 +141,7 @@ module OpenFoodNetwork
     describe "when a producer property is changed" do
       let(:s) { create(:supplier_enterprise) }
       let(:pp) { s.producer_properties.last }
-      let(:product) { create(:simple_product, supplier: s) }
+      let(:product) { create(:base_product, supplier: s) }
       let(:v1) { create(:variant, product: product) }
       let(:v2) { create(:variant, product: product) }
       let(:v_deleted) { create(:variant, product: product, deleted_at: Time.now) }

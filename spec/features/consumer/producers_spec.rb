@@ -15,8 +15,8 @@ feature %q{
   let(:taxon_fruit) { create(:taxon, name: 'Fruit') }
   let(:taxon_veg) { create(:taxon, name: 'Vegetables') }
 
-  let!(:product1) { create(:simple_product, supplier: producer1, taxons: [taxon_fruit]) }
-  let!(:product2) { create(:simple_product, supplier: producer2, taxons: [taxon_veg]) }
+  let!(:product1) { create(:base_product, supplier: producer1, taxons: [taxon_fruit]) }
+  let!(:product2) { create(:base_product, supplier: producer2, taxons: [taxon_veg]) }
 
   let(:shop) { create(:distributor_enterprise) }
   let!(:er) { create(:enterprise_relationship, parent: shop, child: producer1) }

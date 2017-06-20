@@ -6,8 +6,8 @@ module Spree
       before { login_as_admin }
 
       describe "search action" do
-        let!(:p1) { create(:simple_product, name: 'Product 1') }
-        let!(:p2) { create(:simple_product, name: 'Product 2') }
+        let!(:p1) { create(:base_product, name: 'Product 1') }
+        let!(:p2) { create(:base_product, name: 'Product 2') }
         let!(:v1) { p1.variants.first }
         let!(:v2) { p2.variants.first }
         let!(:vo) { create(:variant_override, variant: v1, hub: d, count_on_hand: 44) }

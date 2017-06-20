@@ -1,7 +1,7 @@
 describe Api::Admin::ForOrderCycle::EnterpriseSerializer do
   let(:coordinator)         { create(:distributor_enterprise) }
   let(:order_cycle)         { double(:order_cycle, coordinator: coordinator) }
-  let!(:product) { create(:simple_product) }
+  let!(:product) { create(:base_product) }
   let!(:non_inventory_variant)  { product.variants.first }
   let!(:inventory_variant)  { create(:variant, product: product.reload) }
   let(:serialized_product) { Api::Admin::ForOrderCycle::SuppliedProductSerializer.new(product, order_cycle: order_cycle ).to_json }

@@ -78,7 +78,7 @@ module OpenFoodNetwork
     describe "loading variants" do
       let(:hub) { create(:distributor_enterprise) }
       let(:oc) { create(:simple_order_cycle, distributors: [hub], variants: [v1, v3, v4]) }
-      let(:p) { create(:simple_product) }
+      let(:p) { create(:base_product) }
       let!(:v1) { create(:variant, product: p, unit_value: 3) } # In exchange, not in inventory (ie. not_hidden)
       let!(:v2) { create(:variant, product: p, unit_value: 5) } # Not in exchange
       let!(:v3) { create(:variant, product: p, unit_value: 7, inventory_items: [create(:inventory_item, enterprise: hub, visible: true)]) }

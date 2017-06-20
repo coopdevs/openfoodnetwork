@@ -2,7 +2,7 @@ require 'spec_helper'
 
 module Spree
   describe Classification do
-    let!(:product) { create(:simple_product) }
+    let!(:product) { create(:base_product) }
     let!(:taxon) { create(:taxon) }
     let(:classification) { create(:classification, taxon: taxon, product: product) }
 
