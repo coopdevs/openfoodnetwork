@@ -17,7 +17,7 @@ Spree::Order.class_eval do
   validate :products_available_from_new_distribution, :if => lambda { distributor_id_changed? || order_cycle_id_changed? }
   attr_accessible :order_cycle_id, :distributor_id
 
-  before_validation :shipping_address_from_distributor
+  # before_validation :shipping_address_from_distributor
   before_validation :associate_customer, unless: :customer_id?
   before_validation :ensure_customer, unless: :customer_is_valid?
 
@@ -29,7 +29,10 @@ Spree::Order.class_eval do
     go_to_state :delivery
     go_to_state :payment, :if => lambda { |order|
       # Fix for #2191
-      if order.shipping_method.andand.require_ship_address and
+      shipment = order.shipments.last
+      next unless shipment
+
+      if shipment.shipping_method.andand.require_ship_address and
         if order.ship_address.andand.valid?
           order.create_shipment!
           order.update_totals
@@ -289,6 +292,14 @@ Spree::Order.class_eval do
 
   def changes_allowed?
     complete? && distributor.andand.allow_order_changes? && order_cycle.andand.open?
+  end
+
+  def shipping_method(_reload = nil)
+    @shipping_method
+  end
+
+  def shipping_method=(value)
+    @shipping_method = value
   end
 
   private
