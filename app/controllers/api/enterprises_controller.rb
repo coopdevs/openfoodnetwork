@@ -2,9 +2,9 @@ module Api
   class EnterprisesController < Spree::Api::BaseController
 
     before_filter :override_owner, only: [:create, :update]
-    before_filter :check_type, only: :update
     before_filter :override_sells, only: [:create, :update]
     before_filter :override_visible, only: [:create, :update]
+
     respond_to :json
 
     def managed
@@ -24,6 +24,8 @@ module Api
     end
 
     def update
+      check_type
+
       @enterprise = Enterprise.find_by_permalink(params[:id]) || Enterprise.find(params[:id])
       authorize! :update, @enterprise
 
