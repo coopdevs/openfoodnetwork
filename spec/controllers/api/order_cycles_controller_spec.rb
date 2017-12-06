@@ -73,7 +73,9 @@ module Api
           user.save!
           user
         end
-        let!(:order_cycle) { create(:simple_order_cycle, suppliers: [oc_supplier], distributors: [oc_distributor]) }
+        let!(:order_cycle) do
+          create(:simple_order_cycle, suppliers: [oc_supplier], distributors: [oc_distributor])
+        end
 
         context "as the user of a supplier to an order cycle" do
           before do
@@ -118,7 +120,14 @@ module Api
         let(:distributor) { create(:distributor_enterprise) }
         let(:producer) { create(:supplier_enterprise) }
         let(:coordinator) { create(:distributor_enterprise) }
-        let!(:oc) { create(:simple_order_cycle, coordinator: coordinator, distributors: [distributor], suppliers: [producer]) }
+        let!(:oc) do
+          create(
+            :simple_order_cycle,
+            coordinator: coordinator,
+            distributors: [distributor],
+            suppliers: [producer]
+          )
+        end
 
         let(:params) { { format: :json, as: 'distributor' } }
 
@@ -159,7 +168,14 @@ module Api
         let(:distributor) { create(:distributor_enterprise) }
         let(:producer) { create(:supplier_enterprise) }
         let(:coordinator) { create(:distributor_enterprise) }
-        let!(:oc) { create(:simple_order_cycle, coordinator: coordinator, distributors: [distributor], suppliers: [producer]) }
+        let!(:oc) do
+          create(
+            :simple_order_cycle,
+            coordinator: coordinator,
+            distributors: [distributor],
+            suppliers: [producer]
+          )
+        end
 
         let(:params) { { format: :json, as: 'producer' } }
 
