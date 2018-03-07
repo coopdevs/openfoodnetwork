@@ -520,12 +520,9 @@ describe OrderCycle do
     let!(:order5) { create(:completed_order_with_totals, distributor: shop, user: user, order_cycle: oc)  }
 
     before do
-      Spree::MailMethod.create!(
-        environment: Rails.env,
-        preferred_mails_from: 'spree@example.com'
-      )
+      Spree::Config[:mails_from] = 'spree@example.com'
+      order5.cancel
     end
-    before { order5.cancel }
 
     it "only returns items from non-cancelled orders in the OC, placed by the user at the shop" do
       items = oc.items_bought_by_user(user, shop)

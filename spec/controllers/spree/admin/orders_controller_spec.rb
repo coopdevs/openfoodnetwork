@@ -178,17 +178,16 @@ describe Spree::Admin::OrdersController, type: :controller do
         end
 
         context "when the distributor's ABN has been set" do
-          before { distributor.update_attribute(:abn, "123") }
           before do
-            Spree::MailMethod.create!(
-              environment: Rails.env,
-              preferred_mails_from: 'spree@example.com'
-            )
+            distributor.update_attribute(:abn, "123")
+            Spree::Config[:mails_from] = 'spree@example.com'
           end
+
           it "should allow me to send order invoices" do
             expect do
               spree_get :invoice, params
             end.to change{Spree::OrderMailer.deliveries.count}.by(1)
+
             expect(response).to redirect_to spree.edit_admin_order_path(order)
           end
         end

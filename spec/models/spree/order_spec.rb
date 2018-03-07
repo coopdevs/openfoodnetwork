@@ -487,12 +487,7 @@ describe Spree::Order do
 
   describe "scopes" do
     describe "not_state" do
-      before do
-        Spree::MailMethod.create!(
-          environment: Rails.env,
-          preferred_mails_from: 'spree@example.com'
-        )
-      end
+      before { Spree::Config[:mails_from] = 'spree@example.com' }
 
       it "finds only orders not in specified state" do
         o = FactoryGirl.create(:completed_order_with_totals)

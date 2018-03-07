@@ -114,10 +114,7 @@ describe SubscriptionConfirmJob do
       while !order.completed? do break unless order.next! end
       allow(job).to receive(:send_confirm_email).and_call_original
       job.instance_variable_set(:@order, order)
-      Spree::MailMethod.create!(
-        environment: Rails.env,
-        preferred_mails_from: 'spree@example.com'
-      )
+      Spree::Config[:mails_from] = 'spree@example.com'
       expect(job).to receive(:record_order).with(order)
     end
 
