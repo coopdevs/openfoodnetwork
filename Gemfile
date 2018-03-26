@@ -138,6 +138,7 @@ group :development do
   gem 'guard-rspec', '~> 4.7.3'
   gem 'parallel_tests'
   gem 'rubocop', '>= 0.49.1'
+  gem 'rubocop-rspec', '~> 1.24'
 
   # 1.0.9 fixed openssl issues on macOS https://github.com/eventmachine/eventmachine/issues/602
   # While we don't require this gem directly, no dependents forced the upgrade to a version
