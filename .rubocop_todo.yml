@@ -2197,7 +2197,7 @@ Style/OneLineConditional:
     - 'app/controllers/spree/admin/orders_controller_decorator.rb'
 
 # Offense count: 1
-Style/OpMethod:
+Naming/BinaryOperatorParameterName:
   Exclude:
     - 'app/models/exchange.rb'
 
