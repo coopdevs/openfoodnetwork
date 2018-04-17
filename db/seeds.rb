@@ -48,5 +48,3 @@ def create_mail_method
     preferred_intercept_email: ''
   ).call
 end
-
-create_mail_method
