@@ -19,12 +19,22 @@ every 1.day, at: '12:05am' do
   run_file "lib/open_food_network/integrity_checker.rb"
 end
 
-every 1.day, at: '2:45am' do
-  rake 'db2fog:clean'
+# Checks whether there is a backup storage configured. Note the path this
+# method refers to only exists in staging and production.
+#
+# @return [Boolean]
+def backup_storage_setup?
+  File.file?('../shared/config/db2fog.rb')
 end
 
-every 4.hours do
-  rake 'db2fog:backup'
+if backup_storage_setup?
+  every 1.day, at: '2:45am' do
+    rake 'db2fog:clean'
+  end
+
+  every 4.hours do
+    rake 'db2fog:backup'
+  end
 end
 
 every 5.minutes do
