@@ -52,6 +52,14 @@ feature "As a consumer I want to check out my cart", js: true, retry: 3 do
       end
 
       it "returns me to the cart with an error message" do
+        file_path = Rails.root.join('spec', 'maps.googleapis.js')
+        binding.pry
+        proxy.stub('//maps.googleapis.com/maps/api/js').and_return(
+          body: IO.read(file_path),
+          content_type: 'text/javascript',
+          code: 200
+        )
+
         visit checkout_path
 
         page.should_not have_selector 'closing', text: "Checkout now"

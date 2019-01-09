@@ -40,7 +40,8 @@ require 'spree/testing_support/preferences'
 
 # Capybara config
 require 'capybara/poltergeist'
-Capybara.javascript_driver = :poltergeist
+require 'billy/capybara/rspec'
+Capybara.javascript_driver = :poltergeist_billy
 
 Capybara.register_driver :poltergeist do |app|
   options = {phantomjs_options: ['--load-images=no', '--ssl-protocol=any'], window_size: [1280, 3600], timeout: 2.minutes}
@@ -49,6 +50,10 @@ Capybara.register_driver :poltergeist do |app|
   # Enable the remote inspector: Use page.driver.debug to open a remote debugger in chrome
   #options.merge! {inspector: true}
   Capybara::Poltergeist::Driver.new(app, options)
+end
+
+Billy.configure do |config|
+  config.non_whitelisted_requests_disabled = false
 end
 
 Capybara.default_max_wait_time = 30
