@@ -593,7 +593,15 @@ feature %q{
       context "using edit buttons" do
         let!(:o1) { create(:order_with_distributor, state: 'complete', completed_at: Time.zone.now ) }
         let!(:o2) { create(:order_with_distributor, state: 'complete', completed_at: Time.zone.now ) }
-        let!(:li1) { create(:line_item_with_shipment, order: o1 ) }
+        let!(:li1) do
+          shipment = create(:shipment, order: o1)
+          o1.shipments.reload
+
+          line_item = create(:line_item, order: o1)
+          o1.line_items.reload
+          o1.update!
+          line_item
+        end
         let!(:li2) { create(:line_item_with_shipment, order: o2 ) }
 
         before :each do
@@ -601,26 +609,34 @@ feature %q{
         end
 
         it "shows an edit button for line_items, which takes the user to the standard edit page for the order" do
+          shipment_id = o1.shipment.id
+          shipping_method_id = o1.shipment.shipping_method.id
+
+          puts Spree::ShippingRate.where(shipping_method_id: shipping_method_id, shipment_id: shipment_id).all
+
           expect(page).to have_selector "a.edit-order", :count => 2
 
           # Shows a confirm dialog when unsaved changes exist
           page.driver.dismiss_modal :confirm, text: "Unsaved changes exist and will be lost if you continue." do
             within "tr#li_#{li1.id}" do
               fill_in "quantity", with: (li1.quantity + 1)
-              find("a.edit-order").click
+              find("a.edit-order").click # click_link
             end
           end
 
+          puts Spree::ShippingRate.where(shipping_method_id: shipping_method_id, shipment_id: shipment_id).all
+
           # So we save the changes
-          expect(URI.parse(current_url).path).to eq "/admin/orders/bulk_management"
+          expect(current_path).to eq "/admin/orders/bulk_management" # Do we need this?
           click_button "Save Changes"
           expect(page).to have_selector "#save-bar", text: "All changes saved"
 
           # And try again
           within "tr#li_#{li1.id}" do
-            find("a.edit-order").click
+            puts Spree::ShippingRate.where(shipping_method_id: shipping_method_id, shipment_id: shipment_id).all
+            find("a.edit-order").click # click_link
           end
-          expect(URI.parse(current_url).path).to eq "/admin/orders/#{o1.number}/edit"
+          expect(current_path).to eq "/admin/orders/#{o1.number}/edit"
         end
       end
 

@@ -27,6 +27,7 @@
         = Spree.t(:your_order_is_empty_add_product)
 
     %div
+      - byebug
       = render :partial => 'form', :locals => { :order => @order }
 
 - content_for :head do
