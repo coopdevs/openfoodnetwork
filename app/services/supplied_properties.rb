@@ -4,9 +4,7 @@ class SuppliedProperties
   end
 
   def all
-    (product_properties + producer_properties).uniq do |property_object|
-      property_object.property.presentation
-    end
+    (product_properties + producer_properties).uniq(&:presentation)
   end
 
   private
@@ -14,8 +12,10 @@ class SuppliedProperties
   attr_reader :enterprise
 
   def product_properties
-    products_including_properties = enterprise.supplied_products.includes(:properties)
-    products_including_properties.flat_map(&:properties)
+    Spree::Property
+      .select('DISTINCT spree_properties.*')
+      .joins(products: :supplier)
+      .merge(enterprise.supplied_products)
   end
 
   def producer_properties

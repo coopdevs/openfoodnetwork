@@ -19,7 +19,7 @@ describe SuppliedProperties do
 
     it "removes duplicate product and producer properties" do
       properties = supplied_properties.all
-      expect(properties).to eq([property, different_property])
+      expect(properties).to eq([duplicate_property, different_property])
     end
   end
 end
