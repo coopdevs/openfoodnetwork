@@ -159,7 +159,8 @@ module Api
     private
 
     def product_properties
-      enterprise.supplied_products.flat_map(&:properties)
+      products_with_properties = enterprise.supplied_products.includes(:properties)
+      products_with_properties.flat_map(&:properties)
     end
 
     def producer_properties
