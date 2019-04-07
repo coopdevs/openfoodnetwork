@@ -5,22 +5,16 @@ describe Api::CachedEnterpriseSerializer do
   let(:enterprise) { create(:enterprise) }
 
   describe '#supplied_properties' do
-    let(:property) { create(:property, presentation: 'One') }
-    let(:duplicate_property) { create(:property, presentation: 'One') }
-    let(:different_property) { create(:property, presentation: 'Two') }
-
-    let(:enterprise) do
-      create(:enterprise, properties: [duplicate_property, different_property])
-    end
+    let(:supplied_properties) { instance_double(SuppliedProperties, all: true) }
+    let(:enterprise) { create(:enterprise) }
 
     before do
-      product = create(:product, properties: [property])
-      enterprise.supplied_products << product
+      allow(SuppliedProperties).to receive(:new).with(enterprise) { supplied_properties }
     end
 
-    it "removes duplicate product and producer properties" do
-      properties = cached_enterprise_serializer.supplied_properties
-      expect(properties).to eq([property, different_property])
+    it "calls SuppliedProperties" do
+      cached_enterprise_serializer.supplied_properties
+      expect(supplied_properties).to have_received(:all)
     end
   end
 

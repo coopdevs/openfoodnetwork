@@ -76,9 +76,7 @@ module Api
     end
 
     def supplied_properties
-      (product_properties + producer_properties).uniq do |property_object|
-        property_object.property.presentation
-      end
+      SuppliedProperties.new(enterprise).all
     end
 
     # This results in 3 queries per enterprise
@@ -157,15 +155,6 @@ module Api
     end
 
     private
-
-    def product_properties
-      products_with_properties = enterprise.supplied_products.includes(:properties)
-      products_with_properties.flat_map(&:properties)
-    end
-
-    def producer_properties
-      enterprise.properties
-    end
 
     def enterprise
       object
