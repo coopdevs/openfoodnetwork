@@ -243,4 +243,102 @@ describe OpenFoodNetwork::OrdersAndFulfillmentsReport do
       row_data[23]
     end
   end
+
+  describe 'order_cycle_distributor_totals_by_supplier' do
+    let(:user) { double(:user) }
+    let(:params) { { report_type: 'order_cycle_distributor_totals_by_supplier' } }
+    let(:orders_and_fulfillments_report) { described_class.new(user, params, false) }
+
+    describe '#header' do
+      it 'calls its report class' do
+        distributor_totals_by_supplier = instance_double(described_class::DistributorTotalsBySupplier)
+        allow(described_class::DistributorTotalsBySupplier)
+          .to receive(:new)
+          .and_return(distributor_totals_by_supplier)
+        allow(distributor_totals_by_supplier).to receive(:header)
+
+        orders_and_fulfillments_report.header
+        expect(distributor_totals_by_supplier).to have_received(:header)
+      end
+
+      it 'renders the appropriate header' do
+        expect(orders_and_fulfillments_report.header).to eq(
+          [
+            'Hub',
+            'Producer',
+            'Product',
+            'Variant',
+            'Amount',
+            'Curr. Cost per Unit',
+            'Total Cost',
+            'Total Shipping Cost',
+            'Shipping Method'
+          ]
+        )
+      end
+    end
+
+    # TODO: Test the actual content returned by the procs. Might be easier to
+    # test the outcome of the high-level report now (The resulting array passed
+    # to the table partial.
+    describe '#rules' do
+      it 'calls its report class' do
+        distributor_totals_by_supplier = instance_double(described_class::DistributorTotalsBySupplier, header: true, rules: true)
+
+        allow(described_class::DistributorTotalsBySupplier)
+          .to receive(:new)
+          .and_return(distributor_totals_by_supplier)
+
+        orders_and_fulfillments_report.rules
+        expect(distributor_totals_by_supplier).to have_received(:rules)
+      end
+
+      it 'returns the appropriate rules for the first column' do
+        expect(orders_and_fulfillments_report.rules.first.keys).to match_array(
+          [:group_by, :sort_by, :summary_columns]
+        )
+      end
+
+      it 'returns the appropriate rules for the second column' do
+        expect(orders_and_fulfillments_report.rules.second.keys).to match_array(
+          [:group_by, :sort_by]
+        )
+      end
+
+      it 'returns the appropriate rules for the third column' do
+        expect(orders_and_fulfillments_report.rules.third.keys).to match_array(
+          [:group_by, :sort_by]
+        )
+      end
+
+      it 'returns the appropriate rules for the fourth column' do
+        expect(orders_and_fulfillments_report.rules.fourth.keys).to match_array(
+          [:group_by, :sort_by]
+        )
+      end
+    end
+
+    describe '#columns' do
+      it 'returns a first proc returning the distributor name' do
+        distributor = build(:enterprise, name: 'distributor name')
+        order = build(:order, distributor: distributor)
+        line_item = build(:line_item, order: order)
+        line_items = [line_item]
+
+        columns = orders_and_fulfillments_report.columns
+        expect(columns.first.call(line_items)).to eq(line_item.order.distributor.name)
+      end
+
+      it 'returns a second proc returning the supplier name' do
+        supplier = build(:enterprise, name: 'supplier name')
+        product = build(:product, supplier: supplier)
+        variant = build(:variant, product: product)
+        line_item = build(:line_item, variant: variant)
+        line_items = [line_item]
+
+        columns = orders_and_fulfillments_report.columns
+        expect(columns.second.call(line_items)).to eq(line_item.product.supplier.name)
+      end
+    end
+  end
 end
