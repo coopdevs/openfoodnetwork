@@ -33,8 +33,11 @@ module OpenFoodNetwork
       return unless @order_cycle
       scoper = ScopeProductToHub.new(@distributor)
 
-      OrderCycleDistributedProducts.new(@order_cycle, @distributor).
-        relation.
+      relation = OrderCycleDistributedProducts.new(@order_cycle, @distributor).
+        relation
+
+      byebug
+      relation.
         order(taxon_order).
         each { |product| scoper.scope(product) }.
         select do |product|

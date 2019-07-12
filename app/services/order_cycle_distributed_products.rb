@@ -5,6 +5,8 @@
 # variant should not available for customers to purchase. This class filters
 # out such products so that the customer cannot purchase them.
 class OrderCycleDistributedProducts
+  include Pagy::Backend
+
   def initialize(order_cycle, distributor)
     @order_cycle = order_cycle
     @distributor = distributor
@@ -23,12 +25,17 @@ class OrderCycleDistributedProducts
     end
     product_ids = valid_products.map(&:id)
 
-    Spree::Product.where(id: product_ids)
+    pagy, records = pagy(Spree::Product.where(id: product_ids), items: 1)
+    records
   end
 
   private
 
   attr_reader :order_cycle, :distributor
+
+  def params
+    {}
+  end
 
   # If a product without variants is added to an order cycle, and then some variants are added
   # to that product, but not the order cycle, then the master variant should not available for

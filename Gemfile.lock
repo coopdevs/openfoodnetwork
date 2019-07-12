@@ -547,6 +547,7 @@ GEM
       rack (>= 1.2, < 3)
     oj (3.7.12)
     orm_adapter (0.5.0)
+    pagy (3.3.2)
     paper_trail (5.2.3)
       activerecord (>= 3.0, < 6.0)
       request_store (~> 1.1)
@@ -834,6 +835,7 @@ DEPENDENCIES
   ofn-qz!
   oj
   order_management!
+  pagy
   paper_trail (~> 5.2.3)
   paperclip (~> 3.4.1)
   pg
