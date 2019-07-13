@@ -7,6 +7,7 @@ Darkswarm.controller "ProductsCtrl", ($scope, $filter, $rootScope, Products, Ord
   $scope.filtersActive = true
   $scope.limit = 10
   $scope.order_cycle = OrderCycle.order_cycle
+  $scope.current_page = 1
   # $scope.infiniteDisabled = true
 
   # All of this logic basically just replicates the functionality filtering an ng-repeat
@@ -26,6 +27,10 @@ Darkswarm.controller "ProductsCtrl", ($scope, $filter, $rootScope, Products, Ord
   $scope.$watch 'query', -> $scope.updateFilteredProducts()
   $scope.$watchCollection 'activeTaxons', -> $scope.updateFilteredProducts()
   $scope.$watchCollection 'activeProperties', -> $scope.updateFilteredProducts()
+
+  $scope.loadMore = ->
+    $scope.current_page += 1
+    Products.update($scope.current_page)
 
   $scope.updateFilteredProducts = ->
     $scope.limit = 10

@@ -13,15 +13,7 @@ module OpenFoodNetwork
       products = load_products
 
       if products
-        enterprise_fee_calculator = EnterpriseFeeCalculator.new @distributor, @order_cycle
-
-        ActiveModel::ArraySerializer.new(products,
-                                         each_serializer: Api::ProductSerializer,
-                                         current_order_cycle: @order_cycle,
-                                         current_distributor: @distributor,
-                                         variants: variants_for_shop_by_id,
-                                         master_variants: master_variants_for_shop_by_id,
-                                         enterprise_fee_calculator: enterprise_fee_calculator,).to_json
+        products
       else
         raise NoProducts
       end
@@ -29,18 +21,19 @@ module OpenFoodNetwork
 
     private
 
+    # TODO: There can't be any #select. The result set returned by Postgres
+    # must be what we paginate. Pagination is all based around SQL.
     def load_products
       return unless @order_cycle
       scoper = ScopeProductToHub.new(@distributor)
 
-      relation = OrderCycleDistributedProducts.new(@order_cycle, @distributor).
-        relation
-
-      byebug
-      relation.
+      OrderCycleDistributedProducts.new(@order_cycle, @distributor).
+        relation.
         order(taxon_order).
         each { |product| scoper.scope(product) }.
         select do |product|
+          # TODO: Move this deleted check within the query
+          # TODO: Move has_stock_for_distribution within the query
           !product.deleted? && product.has_stock_for_distribution?(@order_cycle, @distributor)
         end
     end
@@ -53,32 +46,6 @@ module OpenFoodNetwork
           .join(",") + ", name ASC"
       else
         "name ASC"
-      end
-    end
-
-    def all_variants_for_shop
-      # We use the in_stock? method here instead of the in_stock scope because we need to
-      # look up the stock as overridden by VariantOverrides, and the scope method is not affected
-      # by them.
-      scoper = OpenFoodNetwork::ScopeVariantToHub.new(@distributor)
-      Spree::Variant.
-        for_distribution(@order_cycle, @distributor).
-        each { |v| scoper.scope(v) }.
-        select(&:in_stock?)
-    end
-
-    def variants_for_shop_by_id
-      index_by_product_id all_variants_for_shop.reject(&:is_master)
-    end
-
-    def master_variants_for_shop_by_id
-      index_by_product_id all_variants_for_shop.select(&:is_master)
-    end
-
-    def index_by_product_id(variants)
-      variants.each_with_object({}) do |v, vs|
-        vs[v.product_id] ||= []
-        vs[v.product_id] << v
       end
     end
   end

@@ -32,6 +32,9 @@ module Openfoodnetwork
     # details
     config.skylight.environments += ["staging"]
 
+    Pagy::VARS[:max_per_page] = 1
+    Pagy::VARS[:items] = 1
+
     # Settings dependent on locale
     #
     # We need to set this config before the promo environment gets loaded and

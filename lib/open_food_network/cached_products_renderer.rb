@@ -25,6 +25,8 @@ module OpenFoodNetwork
 
     private
 
+    # TODO: Paginate including request params in the key so that we end up with
+    # a cache entry per page, items per page, etc.
     def cached_products_json
       return uncached_products_json unless use_cached_products?
 

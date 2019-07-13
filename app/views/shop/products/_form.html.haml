@@ -51,3 +51,5 @@
         %form{action: main_app.cart_path}
           %i.ofn-i_011-spinner.cart-spinner{"ng-show" => "Cart.dirty"}
           %input.small.button.primary.right.add_to_cart{type: :submit, value: "{{ Cart.dirty ? '#{t(:products_updating_cart)}' : (Cart.empty() ? '#{t(:products_cart_empty)}' : '#{t(:products_edit_cart)}' ) }}", "ng-disabled" => "Cart.dirty || Cart.empty()", "ng-class" => "{ dirty: Cart.dirty }" }
+          %a.small.button.left{"ng-click" => "loadMore()"}
+            = "load more"

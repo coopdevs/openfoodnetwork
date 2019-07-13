@@ -8,11 +8,13 @@ Darkswarm.factory 'Products', ($resource, Shopfront, Dereferencer, Taxons, Prope
     products: null
     loading: true
 
-    update: =>
+    update: (page = 1) =>
       @loading = true
-      @products = []
-      $resource("/shop/products").query (products)=>
-        @products = products
+      $resource("/shop/products?page=" + page).query (products)=>
+        if page > 1
+          @products = @products.concat(products)
+        else
+          @products = products
 
         @extend()
         @dereference()

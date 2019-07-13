@@ -170,6 +170,7 @@ GEM
       tilt
     angularjs-file-upload-rails (2.4.1)
     angularjs-rails (1.5.5)
+    api-pagination (4.8.2)
     arel (3.0.3)
     ast (2.4.0)
     atomic (1.1.101)
@@ -783,6 +784,7 @@ DEPENDENCIES
   angular-rails-templates (~> 0.3.0)
   angularjs-file-upload-rails (~> 2.4.1)
   angularjs-rails (= 1.5.5)
+  api-pagination
   atomic
   awesome_print
   aws-sdk

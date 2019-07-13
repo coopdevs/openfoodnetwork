@@ -92,6 +92,8 @@ describe ShopController, type: :controller do
 
         before do
           exchange.variants << product.variants.first
+          exchange.variants << create(:product).variants.first
+          exchange.variants << create(:product).variants.first
         end
 
         it "returns products via JSON" do

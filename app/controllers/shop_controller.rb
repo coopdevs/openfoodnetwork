@@ -10,14 +10,29 @@ class ShopController < BaseController
   end
 
   def products
-    renderer = OpenFoodNetwork::CachedProductsRenderer.new(current_distributor,
-                                                           current_order_cycle)
+    renderer = OpenFoodNetwork::CachedProductsRenderer.new(
+      current_distributor,
+      current_order_cycle
+    )
 
-    # If we add any more filtering logic, we should probably
-    # move it all to a lib class like 'CachedProductsFilterer'
-    products_json = filter(renderer.products_json)
+    products = paginate(renderer.products_json)
 
-    render json: products_json
+    # I expected @distributor to be nil but it is not. @distributor ==
+    # current_distributor => true
+    serializer = ActiveModel::ArraySerializer.new(
+      products,
+      each_serializer: Api::ProductSerializer,
+      current_order_cycle: current_order_cycle,
+      current_distributor: @distributor,
+      variants: variants_for_shop_by_id,
+      master_variants: master_variants_for_shop_by_id,
+      enterprise_fee_calculator: OpenFoodNetwork::EnterpriseFeeCalculator.new(
+        @distributor,
+        current_order_cycle
+      )
+    )
+
+    render json: serializer
   rescue OpenFoodNetwork::CachedProductsRenderer::NoProducts
     render status: :not_found, json: ''
   end
@@ -42,6 +57,33 @@ class ShopController < BaseController
 
   private
 
+  def all_variants_for_shop
+    # We use the in_stock? method here instead of the in_stock scope because we need to
+    # look up the stock as overridden by VariantOverrides, and the scope method is not affected
+    # by them.
+    scoper = OpenFoodNetwork::ScopeVariantToHub.new(@distributor)
+    Spree::Variant.
+      for_distribution(current_order_cycle, @distributor).
+      each { |v| scoper.scope(v) }.
+      select(&:in_stock?)
+  end
+
+
+  def variants_for_shop_by_id
+    index_by_product_id all_variants_for_shop.reject(&:is_master)
+  end
+
+  def master_variants_for_shop_by_id
+    index_by_product_id all_variants_for_shop.select(&:is_master)
+  end
+
+  def index_by_product_id(variants)
+    variants.each_with_object({}) do |v, vs|
+      vs[v.product_id] ||= []
+      vs[v.product_id] << v
+    end
+  end
+
   def filtered_json(products_json)
     if applicator.rules.any?
       filter(products_json)
@@ -50,16 +92,16 @@ class ShopController < BaseController
     end
   end
 
-  def filter(products_json)
-    products_hash = JSON.parse(products_json)
+  def filter(products_hash)
     applicator.filter!(products_hash)
-    JSON.unparse(products_hash)
   end
 
   def applicator
     return @applicator unless @applicator.nil?
-    @applicator = OpenFoodNetwork::TagRuleApplicator.new(current_distributor,
-                                                         "FilterProducts",
-                                                         current_customer.andand.tag_list)
+    @applicator = OpenFoodNetwork::TagRuleApplicator.new(
+      current_distributor,
+      "FilterProducts",
+      current_customer.andand.tag_list
+    )
   end
 end

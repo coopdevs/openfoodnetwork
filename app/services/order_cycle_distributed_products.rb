@@ -25,8 +25,7 @@ class OrderCycleDistributedProducts
     end
     product_ids = valid_products.map(&:id)
 
-    pagy, records = pagy(Spree::Product.where(id: product_ids), items: 1)
-    records
+    Spree::Product.where(id: product_ids)
   end
 
   private
