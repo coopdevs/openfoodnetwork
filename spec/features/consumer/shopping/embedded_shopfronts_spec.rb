@@ -46,9 +46,7 @@ feature "Using embedded shopfront functionality", js: true do
     it "allows shopping and checkout" do
       on_embedded_page do
         fill_in "variants[#{variant.id}]", with: 1
-        wait_until_enabled 'input.add_to_cart'
-
-        first("input.add_to_cart:not([disabled='disabled'])").click
+        add_to_cart
 
         expect(page).to have_text 'Your shopping cart'
         find('a#checkout-link').click
