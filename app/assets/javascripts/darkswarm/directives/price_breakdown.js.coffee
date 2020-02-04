@@ -4,6 +4,7 @@ Darkswarm.directive "priceBreakdown", ($tooltip)->
   tooltip = $tooltip 'priceBreakdown', 'priceBreakdown', 'click'
   tooltip.scope = 
     variant: "="
+    tracker: "="
   tooltip.templateUrl = "price_breakdown_button.html"
   tooltip.replace = true
   tooltip.restrict = 'E'
@@ -18,3 +19,4 @@ Darkswarm.directive 'priceBreakdownPopup', ->
 
   link: (scope, elem, attrs) ->
     scope.expanded = false unless scope.expanded?
+    scope.tracker.push(['trackEvent', 'Menu', 'Freedom']);
