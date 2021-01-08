@@ -59,7 +59,7 @@ gem 'kaminari', '~> 1.2.1'
 
 gem 'andand'
 gem 'angularjs-rails', '1.5.5'
-gem 'aws-sdk', '1.67.0'
+gem 'aws-sdk', '3.0.1'
 gem 'bugsnag'
 gem 'db2fog'
 gem 'haml'
