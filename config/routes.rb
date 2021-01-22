@@ -2,6 +2,8 @@ Openfoodnetwork::Application.routes.draw do
 
   root :to => 'home#index'
 
+  resource :account, :controller => 'users'
+
   # Redirects from old URLs avoid server errors and helps search engines
   get "/enterprises", to: redirect("/")
   get "/products", to: redirect("/")

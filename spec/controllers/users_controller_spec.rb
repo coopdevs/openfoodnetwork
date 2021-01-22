@@ -2,7 +2,7 @@
 
 require 'spec_helper'
 
-describe Spree::UsersController, type: :controller do
+describe UsersController, type: :controller do
   include AuthenticationHelper
 
   describe "show" do
@@ -20,11 +20,11 @@ describe Spree::UsersController, type: :controller do
     let(:shops) { Enterprise.where(id: orders.pluck(:distributor_id)) }
 
     before do
-      allow(controller).to receive(:spree_current_user) { u1 }
+      allow(controller).to receive(:current_user) { u1 }
     end
 
     it "returns orders placed by the user at normal shops" do
-      spree_get :show
+      get :show
 
       expect(orders).to include d1o1, d1o2
       expect(orders).to_not include d1_order_for_u2, d1o3, d2o1
@@ -46,27 +46,27 @@ describe Spree::UsersController, type: :controller do
     let!(:user) { create(:user) }
 
     it "returns true if email corresponds to a registered user" do
-      spree_post :registered_email, email: user.email
+      post :registered_email, email: user.email
       expect(json_response['registered']).to eq true
     end
 
     it "returns false if email does not correspond to a registered user" do
-      spree_post :registered_email, email: 'nonregistereduser@example.com'
+      post :registered_email, email: 'nonregistereduser@example.com'
       expect(json_response['registered']).to eq false
     end
   end
 
   context '#load_object' do
     it 'should redirect to signup path if user is not found' do
-      allow(controller).to receive_messages(spree_current_user: nil)
-      spree_put :update, user: { email: 'foobar@example.com' }
+      allow(controller).to receive_messages(current_user: nil)
+      put :update, user: { email: 'foobar@example.com' }
       expect(response).to redirect_to('/login')
     end
   end
 
   context '#create' do
     it 'should create a new user' do
-      spree_post :create, user: { email: 'foobar@example.com', password: 'foobar123', password_confirmation: 'foobar123' }
+      post :create, user: { email: 'foobar@example.com', password: 'foobar123', password_confirmation: 'foobar123' }
       expect(assigns[:user].new_record?).to be_falsey
     end
   end
